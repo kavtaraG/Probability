@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body >
+    <h1><%= title %></h1>
+    <p>Welcome to Probability <%= title %></p>
+    <p>Win, Draw Lose chances of Argentina in World Cup 2022</p>
+    
+    <div id="div">
+      <label>Argentina Win <input id="win" onload="calcWin()" readonly> %
+      </label>
+      <label>Argentina Draw <input id="draw" onload="calcDraw()" readonly> %
+      </label>
+      <label>Argentina Lose <input id="lose" onload="calcLose()" readonly> %
+      </label><br><br>
+
+      <label>Argentina probability of lose if will play for wins<input id="ifwin" onload="calcIfWin()" readonly> %
+      </label>
+      <label>Argentina of lose if will be play for draw <input id="ifdraw" onload="calcIfDraw()" readonly> %
+      </label>
+      <label>Argentina Lose <input id="iflose" onload="calcIfLose()" readonly> %
+      </label><br><br>
+
+      <label>Argentina Win if go wrong <input id="ifwinwrong" onload="calcWinWrong()" readonly> %
+      </label>
+      <label>Argentina Draw if go wrong <input id="ifdrawwrong" onload="calcDrawWrong()" readonly> %
+      </label>
+
+    </div>
+    <script>
+      //played matches by argentina
+const matches = ({
+    Win: 9, 
+    Draw: 2, 
+    Lose: 1
+});
+
+let sum = Object.values(matches).reduce((Win, Draw, Lose) => Win + Draw);
+
+//Conditional probability
+let winCondProb = matches.Win/sum;
+let drawCondProb = (matches.Draw)/sum;
+let loseCondProb = matches.Lose/sum;
+
+//Binary probability
+let binWin = (winCondProb**9)*((1-winCondProb)**3);
+let binDraw = (drawCondProb**2)*((1-drawCondProb)**10);
+let binLose = (loseCondProb**1)*((1-loseCondProb)**11);
+
+// let median = ()
+
+//Derivative of binary probability
+let derivativeProbWin = 77;
+let derivativeProbDraw = 75;
+let derivativeProbLose = 24;
+
+//Uncertanity risk
+let risksWin = (100 - derivativeProbWin);
+let risksDraw = ( 100 - derivativeProbDraw);
+let risksLose = ( derivativeProbLose);
+
+let risksOfLose_win = (risksWin + derivativeProbLose);
+let risksOfLose_draw = (risksDraw + derivativeProbLose);
+
+//win
+const calcWin = () => {
+    
+    let num1 = derivativeProbWin;
+    document.getElementById('win').value = num1;
+}
+
+const calcDraw = () => {
+    let num1 = derivativeProbDraw;
+    document.getElementById('draw').value = num1;
+}
+
+const calcLose = () => {
+    let num1 = derivativeProbLose;
+    document.getElementById('lose').value = num1;
+}
+
+//if will be win draw lose
+
+const calcIfWin = () => {
+    let num1 = risksWin;
+    document.getElementById('ifwin').value = num1;
+}
+
+const calcIfDraw = () => {
+    let num1 = risksDraw;
+    document.getElementById('ifdraw').value = num1;
+}
+
+const calcIfLose = () => {
+    let num1 = risksLose;
+    document.getElementById('iflose').value = num1;
+}
+
+//if gos wong
+const calcWinWrong = () => {
+    let num1 = risksOfLose_win;
+    document.getElementById('ifwinwrong').value = num1;
+}
+
+const calcDrawWrong = () => {
+    let num1 = risksOfLose_draw;
+    document.getElementById('ifdrawwrong').value = num1;
+}
+
+
+//win. draw, lose
+window.onload = calcWin();
+window.onload = calcDraw();
+window.onload = calcLose();
+
+//if will be win draw lose
+window.onload = calcIfWin();
+window.onload = calcIfDraw();
+window.onload = calcIfLose();
+
+//if goes wrong
+window.onload = calcWinWrong();
+window.onload = calcDrawWrong();
+
+module.exports = {  
+                    matches, 
+                    winCondProb,
+                    drawCondProb,
+                    loseCondProb,
+                    binWin,
+                    binDraw,
+                    binLose,
+                    derivativeProbWin,
+                    derivativeProbDraw,
+                    derivativeProbLose,
+                    risksWin,
+                    risksDraw,
+                    risksLose,
+                    risksOfLose_win,
+                    risksOfLose_draw  
+                };
+    </script>
+
+  </body>
+</html>
